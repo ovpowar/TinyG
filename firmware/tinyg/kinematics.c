@@ -53,8 +53,8 @@ void ik_kinematics(const float travel[], float steps[])
 {
 	float joint[AXES];
 
-//	_inverse_kinematics(travel, joint);				// you can insert inverse kinematics transformations here
-	memcpy(joint, travel, sizeof(float)*AXES);		//...or just do a memcpy for Cartesian machines
+	_inverse_kinematics(travel, joint);				// you can insert inverse kinematics transformations here
+	// memcpy(joint, travel, sizeof(float)*AXES);		//...or just do a memcpy for Cartesian machines
 
 	// Map motors to axes and convert length units to steps
 	// Most of the conversion math has already been done in during config in steps_per_unit()
@@ -95,14 +95,18 @@ void ik_kinematics(const float travel[], float steps[])
  *	run avery 5 ms, but this might be lowered. To profile this time look at the
  *	time it takes to complete the mp_exec_move() function.
  */
-/*
 static void _inverse_kinematics(float travel[], float joint[])
 {
-	for (uint8_t i=0; i<AXES; i++) {
-		joint[i] = travel[i];
-	}
+	// For CoreXY
+	joint[0] = travel[0] - travel[1];
+	joint[1] = travel[0] + travel[1];
+
+	// // This is a simple example for a cartesian machine
+	// for (uint8_t i=0; i<AXES; i++) {
+	// 	joint[i] = travel[i];
+	// }
 }
-*/
+
 
 #ifdef __cplusplus
 }
